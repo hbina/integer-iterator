@@ -1,5 +1,22 @@
-pub struct DigitIterator<T>(T); // Where T  is digit?
+/// A simple wrapper type over the integer type `T` because `Rust` reserves the right to implement
+/// `Iterator` for them.
+///
+/// # Example
+///
+/// ```rust
+/// # use integer_iterator::DigitIterator;
+/// # pub fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// let mut y = DigitIterator(30u32);
+/// assert_eq!(y.next(), Some(0));
+/// assert_eq!(y.next(), Some(3));
+/// assert_eq!(y.next(), None);
+/// # Ok(())
+/// # }
+/// ```
+///
+pub struct DigitIterator<T>(pub T); // TODO :: Where T is an integer?
 
+/// Extends a type `T` with the ability to become a [`DigitIterator`].
 pub trait IntoDigits<T> {
     fn digits(self) -> DigitIterator<T>;
 }
