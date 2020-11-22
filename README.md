@@ -1,4 +1,6 @@
-# integer-iterator
+## integer-iterator
+
+![Crates.io](https://img.shields.io/crates/v/integer-iterator)
 
 Implement Iterator over primitive integer types in Rust.
 Also, this crate exposes the trait so one can implement it for any desired types.
