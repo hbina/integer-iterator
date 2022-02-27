@@ -14,7 +14,7 @@
 /// # }
 /// ```
 ///
-pub struct DigitIterator<T>(pub T); // TODO :: Where T is an integer?
+pub struct DigitIterator<T>(pub T, bool); // TODO :: Where T is an integer?
 
 /// Extends a type `T` with the ability to become a [`DigitIterator`].
 pub trait IntoDigits<T> {
@@ -25,7 +25,7 @@ macro_rules! impl_digit_positive {
     ($T:ty) => {
         impl IntoDigits<$T> for $T {
             fn digits(self) -> DigitIterator<$T> {
-                DigitIterator(self)
+                DigitIterator(self, self == 0)
             }
         }
 
@@ -33,7 +33,10 @@ macro_rules! impl_digit_positive {
             type Item = u8;
 
             fn next(&mut self) -> Option<Self::Item> {
-                if self.0 != 0 {
+                if self.1 {
+                    self.1 = false;
+                    Some(0)
+                } else if self.0 != 0 {
                     let remainder = (self.0 % (10 as $T)) as Self::Item;
                     self.0 /= (10 as $T);
                     Some(remainder)
@@ -49,7 +52,7 @@ macro_rules! impl_digit_negative {
     ($T:ty) => {
         impl IntoDigits<$T> for $T {
             fn digits(self) -> DigitIterator<$T> {
-                DigitIterator(-self)
+                DigitIterator(-self, self == 0)
             }
         }
 
@@ -57,7 +60,10 @@ macro_rules! impl_digit_negative {
             type Item = u8;
 
             fn next(&mut self) -> Option<Self::Item> {
-                if self.0 != 0 {
+                if self.1 {
+                    self.1 = false;
+                    Some(0)
+                } else if self.0 != 0 {
                     let remainder = (self.0 % (10 as $T)) as Self::Item;
                     self.0 /= (10 as $T);
                     Some(remainder)
@@ -82,16 +88,24 @@ impl_digit_negative!(i64);
 impl_digit_negative!(i128);
 
 #[test]
-fn basic() {
-    let mut positive = 1234u32.digits();
-    assert_eq!(positive.next(), Some(4));
-    assert_eq!(positive.next(), Some(3));
-    assert_eq!(positive.next(), Some(2));
-    assert_eq!(positive.next(), Some(1));
+fn test_all_numbers() {
+    for x in u128::MIN..10000u128 {
+        let length = x
+            .digits()
+            .enumerate()
+            .map(|(idx, _)| idx + 1)
+            .last()
+            .unwrap();
+        assert_eq!(length, x.to_string().len());
+    }
 
-    let mut negative = (-1234i32).digits();
-    assert_eq!(negative.next(), Some(4));
-    assert_eq!(negative.next(), Some(3));
-    assert_eq!(negative.next(), Some(2));
-    assert_eq!(negative.next(), Some(1));
+    for x in 0..-10000i128 {
+        let length = x
+            .digits()
+            .enumerate()
+            .map(|(idx, _)| idx + 1)
+            .last()
+            .unwrap();
+        assert_eq!(length, x.to_string().len());
+    }
 }

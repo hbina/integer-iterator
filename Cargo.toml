@@ -5,8 +5,8 @@ authors = ["Hanif Bin Ariffin <hanif.ariffin.4326@gmail.com>"]
 edition = "2018"
 description = "Add the ability to iterate over the digit of all primitive integer types. Also exposes the trait so one can implement it oneself."
 license = "MIT"
+repository = "https://github.com/hbina/integer-iterator"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num-traits = "0.2.12"
