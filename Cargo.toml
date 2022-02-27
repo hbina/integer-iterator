@@ -1,6 +1,6 @@
 [package]
 name = "integer-iterator"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Hanif Bin Ariffin <hanif.ariffin.4326@gmail.com>"]
 edition = "2018"
 description = "Add the ability to iterate over the digit of all primitive integer types. Also exposes the trait so one can implement it oneself."
